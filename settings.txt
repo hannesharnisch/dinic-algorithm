@@ -4,8 +4,8 @@
 ########################
 
 #Insert data path of instance to solve:
-data_path = [data/small.txt]
+data_path = [data/small.json]
 
 #Select solver mode - XX | YY 
-solver_method = [XX]
+solver_method = [Dinic]
 
