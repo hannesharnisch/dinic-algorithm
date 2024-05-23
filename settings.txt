@@ -1,0 +1,11 @@
+########################
+##Settings for solving##
+###MIN COST FLOW########
+########################
+
+#Insert data path of instance to solve:
+data_path = [data/small.txt]
+
+#Select solver mode - XX | YY 
+solver_method = [XX]
+
