@@ -24,24 +24,25 @@ class Graph(Generic[N, A]):
     def arcs(self) -> list[A]:
         return self.__arcs.values()
     
-    def get_node(self, node_NodeID: NodeID) -> N:
-        if node_NodeID not in self.__nodes:
+    def get_node(self, node_id: NodeID) -> N:
+        if node_id not in self.__nodes:
             raise ValueError('Node not found')
         
-        return self.__nodes[node_NodeID]
+        return self.__nodes[node_id]
     
     def add_node(self, node: N):
-        self.__nodes[node.NodeID] = node
+        self.__nodes[node.id] = node
+        self.__adjacency_list[node.id] = []
 
     def remove_node(self, node: N):
-        self.__nodes.pop(node.NodeID)
+        self.__nodes.pop(node.id)
         for arc in self.__arcs.values():
-            if arc.from_node == node.NodeID or arc.to_node == node.NodeID:
+            if arc.from_node == node.id or arc.to_node == node.id:
                 self.remove_arc((arc.from_node, arc.to_node))
         for key, adjacent_nodes in self.__adjacency_list.items():
-            if node.NodeID in adjacent_nodes:
-                self.__adjacency_list[key].remove(node.NodeID)
-        self.__adjacency_list.pop(node.NodeID)
+            if node.id in adjacent_nodes:
+                self.__adjacency_list[key].remove(node.ID)
+        self.__adjacency_list.pop(node.id)
 
 
     def get_arc(self, from_node: NodeID, to_node: NodeID) -> A:
@@ -51,8 +52,8 @@ class Graph(Generic[N, A]):
         return self.__arcs[(from_node, to_node)]
 
     def add_arc(self, arc: A):
-        if arc.from_node not in self.nodes or arc.to_node not in self.nodes:
-            raise ValueError('Arc contains invalNodeID node')
+        if arc.from_node not in self.__nodes or arc.to_node not in self.__nodes:
+            raise ValueError('Arc contains invalid node')
 
         self.__arcs[(arc.from_node, arc.to_node)] = arc
         self.__adjacency_list[arc.from_node].append(arc.to_node)
@@ -64,5 +65,5 @@ class Graph(Generic[N, A]):
     def is_adjacent(self, from_node: NodeID, to_node: NodeID) -> bool:
         return to_node in self.__adjacency_list[from_node]
     
-    def neighbors(self, node_NodeID: NodeID) -> list[N]:
-        return self.__adjacency_list[node_NodeID].map(lambda x: self.__nodes[x])
+    def neighbors(self, node_id: NodeID) -> list[N]:
+        return self.__adjacency_list[node_id].map(lambda x: self.__nodes[x])
