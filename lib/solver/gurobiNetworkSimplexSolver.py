@@ -5,8 +5,6 @@ from lib.solver.solverResult import SolverResult
 
 
 class GurobiNetworkSimplexSolver(Solver):
-    def __init__(self, initial_result_solver: Solver):
-        self.initial_result_solver = initial_result_solver
 
     def solve(self, network) -> SolverResult:
         initial_result = self.initial_result_solver.solve(network)
