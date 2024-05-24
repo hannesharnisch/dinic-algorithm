@@ -11,10 +11,8 @@ class NetworkInput:
         with open(data_path_and_name, 'r') as file:
             data = json.load(file)
             for node, value in data['nodes'].items():
-                print(node)
                 self.nodes.append(Node(node, value['demand']))
             for arc in data['arcs']:
-                print(arc)
                 capacity = Capacity(ub=arc['upper_bound'], lb=arc['lower_bound'], current=arc['lower_bound'])
                 self.arcs.append(CapacitatedArc(arc['from'], arc['to'], capacity))
 
