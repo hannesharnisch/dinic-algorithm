@@ -22,13 +22,13 @@ class MinCostFlowTransformer(Transformer):
             from_node.demand = arc.capacity
             networkCopy.remove_arc(arc.from_node, arc.to_node)
 
-        networkCopy.remove_node(networkCopy.get_node(0)) #TODO replace "s"
-        networkCopy.remove_node(networkCopy.get_node(99)) #TODO replace "t"
+        networkCopy.remove_node(networkCopy.get_node("s"))
+        networkCopy.remove_node(networkCopy.get_node("t"))
 
         return networkCopy
 
     def __getArcsFromSource(self, arcs: list[CapacitatedArc]) -> list[CapacitatedArc]:
-        return list(filter(lambda a: a.from_node == 0, arcs)) #TODO replace "s"
+        return list(filter(lambda a: a.from_node == "s", arcs))
     
     def __getArcsToTarget(self, arcs: list[CapacitatedArc]) -> list[CapacitatedArc]:
-        return list(filter(lambda a: a.to_node == 99, arcs)) #TODO replace "t"
+        return list(filter(lambda a: a.to_node == "t", arcs))

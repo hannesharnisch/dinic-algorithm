@@ -12,8 +12,9 @@ class MaxFlowTransformer(Transformer):
 
         The source node id will be "s" and the target node id will be "t"! 
         """
-        startNode = Node(0, -math.inf) # TODO set to "s"
-        endNode = Node(99, math.inf) # TODO set to "t"
+        # Other option for inf is sys.maxsize
+        startNode = Node("s", -math.inf)
+        endNode = Node("t", math.inf)
 
         networkCopy = copy.deepcopy(network)
 
@@ -21,16 +22,16 @@ class MaxFlowTransformer(Transformer):
         networkCopy.add_node(endNode)
 
         for n in networkCopy.nodes:
-            if n.id == 0 or n.id == 99: #TODO set 0 to "s"
+            if n.id == "s" or n.id == "t":
                 continue
             
             if n.demand < 0:
                 # Add arc from source
-                networkCopy.add_arc(CapacitatedArc(0, n.id, abs(n.demand))) #TODO set 0 to "s"
+                networkCopy.add_arc(CapacitatedArc("s", n.id, abs(n.demand)))
 
             if n.demand > 0:
                 #Add arc to target
-                networkCopy.add_arc(CapacitatedArc(n.id, 99, n.demand)) # TODO set 99 to "t"
+                networkCopy.add_arc(CapacitatedArc(n.id, "t", n.demand))
             
             n.demand = 0 # Set demand to 0
 
