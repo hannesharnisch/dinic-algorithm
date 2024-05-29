@@ -7,6 +7,8 @@ from lib.solver.dinicSolver import DinicSolver
 from lib.solver.gurobiInitialSolver import GurobiInitialSolver
 from lib.solver.gurobiNetworkSimplexSolver import GurobiNetworkSimplexSolver
 from lib.solvingPipeline import SolvingPipeline
+from lib.transformer.maxFlowTransformer import MaxFlowTransformer
+from lib.transformer.minCostFlowTransformer import MinCostFlowTransformer
 
 
 if __name__ == '__main__':
@@ -25,10 +27,10 @@ if __name__ == '__main__':
     print('Start solving MinCostFlow...')
     pipeline = SolvingPipeline(network)
     if settings.get_solver_method() ==  'Dinic':
-        print('Selected solover method:' + settings.get_solver_method())
-        # pipeline.transformNetwork(XXXTransformer())
+        print('Selected solover method: ' + settings.get_solver_method())
+        pipeline.transformNetwork(MaxFlowTransformer())
         pipeline.applySolver(DinicSolver())
-        # pipeline.transformNetwork(YYYTransformer())
+        pipeline.transformNetwork(MinCostFlowTransformer())
     elif settings.get_solver_method() == 'Gurobi':
         print('Selected solover method:' + settings.get_solver_method())
         pipeline.applySolver(GurobiInitialSolver())

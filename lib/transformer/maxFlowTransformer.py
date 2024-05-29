@@ -3,6 +3,7 @@ from lib.network.network import Node
 from lib.network.network import CapacitatedArc
 from lib.transformer.transformer import Transformer
 import copy
+import math
 
 class MaxFlowTransformer(Transformer):
     def transform(self, network: Network) -> Network:
@@ -11,11 +12,8 @@ class MaxFlowTransformer(Transformer):
 
         The source node id will be "s" and the target node id will be "t"! 
         """
-        simulated_infinity = 999999999999999999999999999999999999999999999999999999999999999999999999999999999999
-        simulated_negative_infinity = -simulated_infinity
-
-        startNode = Node(0, simulated_negative_infinity) # TODO set to "s"
-        endNode = Node(99, simulated_infinity) # TODO set to "t"
+        startNode = Node(0, -math.inf) # TODO set to "s"
+        endNode = Node(99, math.inf) # TODO set to "t"
 
         networkCopy = copy.deepcopy(network)
 
