@@ -1,4 +1,6 @@
+import copy
 from math import inf
+from typing import Tuple
 from lib.network.capacitatedArc import CapacitatedArc, Capacity
 from lib.network.graph.identifiable import NodeID
 from lib.network.network import Network
@@ -8,49 +10,54 @@ from lib.solver.solverState import SolverSolution, SolverState
 
 class DinicSolver(Solver):
     levels: dict[NodeID, int] = {}
+    dinic_network: Network
 
     def solve(self, state: SolverState) -> SolverState:
-        # TODO: implement Dinic Algorithm
+
+        self.dinic_network = copy.deepcopy(state.network)
         total_flow = 0
 
-        while self.assign_levels_while_path_exists(state.network):
 
-            path = self.rek_get_path(state.network)
-            max_flow = self.get_max_flow(path, state.network)
-            self.load_path(path, state.network, max_flow)
+        while self.assign_levels_while_path_exists():
+
+            path = self.rek_get_path()
+            max_flow = self.get_max_flow(path)
+            self.load_path(path, max_flow)
 
             total_flow += max_flow
         
-            # print("path", path)
-            # print("flow", max_flow)
-            
-            # for arc in state.network.arcs:
-            #     if(arc.flow < 0 ):
-            #         print("arc", arc)
+        flow = self.get_final_flow()
 
-            # print()
-            # 
-            # print("Levels", self.levels)
-            flow = {}
-            for arc in state.network.arcs:
-                if arc.from_node == "s":
-                    flow[(arc.to_node,arc.from_node)] = abs(arc.flow)
 
+        print("network", self.dinic_network.arcs)
+        print("flow",flow)
+        print("total_flow",total_flow)
+     
         return SolverState(network=state.network, solution=SolverSolution(flow=flow, target_value=total_flow))
+    
+    def get_final_flow(self) -> dict[Tuple[NodeID, NodeID], int]:
+
+        res = {}
+
+        for arc in self.dinic_network.arcs:
+            if arc.flow < 0:
+                res[(arc.to_node, arc.from_node)] = abs(arc.flow)
+
+        return res
   
-    def rek_get_path(self, network: Network, source: NodeID = "s", sink: NodeID="t") -> list[NodeID]:
+    def rek_get_path(self, source: NodeID = "s", sink: NodeID="t") -> list[NodeID]:
         if source == sink:
             return []
-        for neighbor in network.neighbors(source):
-            neighbor_arc = network.get_arc(source, neighbor.id)
+        for neighbor in self.dinic_network.neighbors(source):
+            neighbor_arc = self.dinic_network.get_arc(source, neighbor.id)
             if self.levels[neighbor.id] == self.levels[source] + 1 and neighbor_arc.flow < neighbor_arc.capacity.ub:
-                path = self.rek_get_path(network, neighbor.id, sink)
+                path = self.rek_get_path(neighbor.id, sink)
                 if path is not None:
                     path.insert(0, neighbor_arc)
                     return path
         return None
     
-    def get_max_flow(self, path: list[CapacitatedArc], network: Network) -> None:
+    def get_max_flow(self, path: list[CapacitatedArc]) -> None:
         
         ub = inf
         lb = -inf
@@ -67,21 +74,19 @@ class DinicSolver(Solver):
 
         return ub
     
-    def load_path(self, path: list[CapacitatedArc], network: Network, flow: int) -> None:
+    def load_path(self, path: list[CapacitatedArc], flow: int) -> None:
         for arc in path:
             arc.flow += flow
             try :
-                reverse_arc = network.get_arc(arc.to_node, arc.from_node)
-                # print("reverse:", reverse_arc)
+                reverse_arc = self.dinic_network.get_arc(arc.to_node, arc.from_node)
                 reverse_arc.flow -= flow
             except ValueError:
                 reverse_arc = CapacitatedArc(from_node=arc.to_node, to_node=arc.from_node, capacity=Capacity(-arc.capacity.lb,-arc.capacity.ub),flow=-flow, cost=arc.cost)
-                network.add_arc(reverse_arc)
-                # print("reverse:", reverse_arc)
+                self.dinic_network.add_arc(reverse_arc)
     
     
-    def assign_levels_while_path_exists(self, network: Network, source: NodeID = "s", sink: NodeID = "t") -> bool:
-        for n in network.nodes:
+    def assign_levels_while_path_exists(self, source: NodeID = "s", sink: NodeID = "t") -> bool:
+        for n in self.dinic_network.nodes:
             self.levels[n.id] = -1
  
         # Level of source vertex
@@ -95,8 +100,8 @@ class DinicSolver(Solver):
         while q:
             current_node_id = q.pop(0)
 
-            for neighbor in network.neighbors(current_node_id):
-                neighbor_arc = network.get_arc(current_node_id, neighbor.id)
+            for neighbor in self.dinic_network.neighbors(current_node_id):
+                neighbor_arc = self.dinic_network.get_arc(current_node_id, neighbor.id)
 
 
                 if self.levels[neighbor.id] < 0 and abs(neighbor_arc.flow) < neighbor_arc.capacity.ub:
