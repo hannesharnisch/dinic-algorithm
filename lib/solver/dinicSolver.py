@@ -9,12 +9,29 @@ class DinicSolver(Solver):
 
     def solve(self, state: SolverState) -> SolverState:
         # TODO: implement Dinic Algorithm
+        self.assign_levels_while_path_exists(network)
+        path = self.get_path(network)
+        print("path", path)
+        print("Levels", self.levels)
+        return SolverResult(network=network)
 
-        return state
+    def get_path(self, network: Network, source: NodeID = "s", sink: NodeID="t") -> list[NodeID]:
+        path = []
+        current_node = source
+        path.append(current_node)
+        while current_node != sink:
+            for neighbor in network.neighbors(current_node):
+                neighbor_arc = network.get_arc(current_node, neighbor.id)
+                if self.levels[neighbor.id] == self.levels[current_node] + 1 and neighbor_arc.flow < neighbor_arc.capacity.ub:
+                    path.append(neighbor.id)
+                    current_node = neighbor.id
+                    break
+        return path
+    
     
     def assign_levels_while_path_exists(self, network: Network, source: NodeID = "s", sink: NodeID = "t") -> bool:
         for n in network.nodes:
-            self.levels[n] = -1
+            self.levels[n.id] = -1
  
         # Level of source vertex
         self.levels[source] = 0
@@ -25,15 +42,18 @@ class DinicSolver(Solver):
         q = []
         q.append(source)
         while q:
-            u = q.pop(0)
-            for i in range(len(network.neighbors[u])):
-                e = network.get_arc(u, i)
-                if self.levels[e.id] < 0 and e.flow < e.capacity.ub:
+            current_node_id = q.pop(0)
+
+            for neighbor in network.neighbors(current_node_id):
+                neighbor_arc = network.get_arc(current_node_id, neighbor.id)
+                print(neighbor_arc)
+
+                if self.levels[neighbor.id] < 0 and neighbor_arc.flow < neighbor_arc.capacity.ub:
  
                     # Level of current vertex is
                     # level of parent + 1
-                    self.levels[e.id] = self.levels[u]+1
-                    q.append(e.id)
+                    self.levels[neighbor.id] = self.levels[current_node_id]+1
+                    q.append(neighbor.id)
  
         # If we can not reach to the sink we
         # return False else True
