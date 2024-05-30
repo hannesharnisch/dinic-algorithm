@@ -11,3 +11,4 @@ class Capacity:
 @dataclass
 class CapacitatedArc(BaseArc):
     capacity: Capacity
+    cost: int

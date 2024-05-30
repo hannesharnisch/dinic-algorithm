@@ -14,7 +14,7 @@ class NetworkInput:
                 self.nodes.append(Node(node, value['demand']))
             for arc in data['arcs']:
                 capacity = Capacity(ub=arc['upper_bound'], lb=arc['lower_bound'], current=arc['lower_bound'])
-                self.arcs.append(CapacitatedArc(arc['from'], arc['to'], capacity))
+                self.arcs.append(CapacitatedArc(arc['from'], arc['to'], capacity, arc['cost']))
 
 
 

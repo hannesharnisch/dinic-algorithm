@@ -7,7 +7,7 @@ from lib.solver.solverResult import SolverResult
 class GurobiNetworkSimplexSolver(Solver):
 
     def solve(self, network) -> SolverResult:
-        initial_result = self.initial_result_solver.solve(network)
+        #initial_result = self.initial_result_solver.solve(network)
         #TODO: implement gurobi network simplex
-        return SolverResult(network=initial_result.network, cost=0, flow=0)
+        return SolverResult(network=network, cost=0, flow=0)
         

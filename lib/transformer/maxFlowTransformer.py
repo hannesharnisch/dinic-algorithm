@@ -27,11 +27,11 @@ class MaxFlowTransformer(Transformer):
             
             if n.demand < 0:
                 # Add arc from source
-                networkCopy.add_arc(CapacitatedArc("s", n.id, abs(n.demand)))
+                networkCopy.add_arc(CapacitatedArc("s", n.id, abs(n.demand), 0))
 
             if n.demand > 0:
                 #Add arc to target
-                networkCopy.add_arc(CapacitatedArc(n.id, "t", n.demand))
+                networkCopy.add_arc(CapacitatedArc(n.id, "t", n.demand, 0))
             
             n.demand = 0 # Set demand to 0
 
