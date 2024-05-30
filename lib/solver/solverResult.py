@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from lib.network.graph.baseArc import BaseArc
 from lib.network.network import Network
+from typing import Tuple
+from lib.network.graph.identifiable import NodeID
 
 
 @dataclass
 class SolverSolution:
-    flow: dict[BaseArc, int]
+    flow: Tuple[NodeID, NodeID]
     target_value: int = 0
     
     def __str__(self) -> str:
