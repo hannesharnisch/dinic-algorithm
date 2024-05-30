@@ -12,7 +12,7 @@ class SolverSolution:
     def __str__(self) -> str:
         return "Target: " + str(self.target_value) + ", Flow: " + str(self.flow)
 @dataclass
-class SolverResult:
+class SolverState:
     network: Network
     solution: SolverSolution = None
     

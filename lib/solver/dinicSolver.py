@@ -3,16 +3,16 @@ from typing import Callable, Type
 from lib.network.graph.identifiable import NodeID
 from lib.network.network import Network
 from lib.solver.solver import Solver
-from lib.solver.solverResult import SolverResult
+from lib.solver.solverState import SolverState
 
 
 class DinicSolver(Solver):
     levels: dict[NodeID, int] = {}
 
-    def solve(self, network: Network) -> SolverResult:
+    def solve(self, network: Network) -> SolverState:
         # TODO: implement Dinic Algorithm
 
-        return SolverResult(network=network)
+        return SolverState(network=network)
     
     def assign_levels_while_path_exists(self, network: Network, source: NodeID = "s", sink: NodeID = "t") -> bool:
         for n in network.nodes:
