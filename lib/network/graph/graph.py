@@ -36,9 +36,11 @@ class Graph(Generic[N, A]):
 
     def remove_node(self, node: N):
         self.__nodes.pop(node.id)
-        for arc in self.__arcs.values():
-            if arc.from_node == node.id or arc.to_node == node.id:
-                self.remove_arc((arc.from_node, arc.to_node))
+
+        arcs_to_remove = filter(lambda arc: arc.from_node == node.id or arc.to_node == node.id, self.__arcs.values())
+
+        for arc in list(arcs_to_remove):
+            self.remove_arc(arc.from_node, arc.to_node)
         for key, adjacent_nodes in self.__adjacency_list.items():
             if node.id in adjacent_nodes:
                 self.__adjacency_list[key].remove(node.ID)
