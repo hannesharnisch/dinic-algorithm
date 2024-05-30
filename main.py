@@ -35,8 +35,8 @@ if __name__ == '__main__':
         pipeline.apply_solver(GurobiMaxFlowSolver())
     else:
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
-    pipeline.transform_network(MinCostFlowTransformer())
-    pipeline.apply_solver(GurobiMinCostFlowSolver())
+    # pipeline.transform_network(MinCostFlowTransformer())
+    # pipeline.apply_solver(GurobiMinCostFlowSolver())
     pipeline.run()
     network_flow = pipeline.result
     print('Done')
