@@ -4,13 +4,12 @@
 from typing import Callable
 from lib.network.network import Network
 from lib.solver.solver import Solver
-from lib.solver.solverResult import SolverResult
+from lib.solver.solverResult import SolverResult, SolverSolution
 from lib.transformer.transformer import Transformer
 
 
 class SolvingPipeline:
     __pipeline: list[Callable[[SolverResult], SolverResult]] = []
-    
     
     def __init__(self, network: Network):
         self.network = network
@@ -19,8 +18,11 @@ class SolvingPipeline:
     def apply_solver(self, solver: Solver) -> 'SolvingPipeline':
         return self.__add(lambda state: solver.solve(state.network))
     
-    def transform_network(self, transformer: Transformer) -> 'SolvingPipeline':
+    def transform_network(self, transformer: Transformer[Network]) -> 'SolvingPipeline':
         return self.__add(lambda state: SolverResult(transformer.transform(state.network), state.solution))
+    
+    def transform_solution(self, transformer: Transformer[SolverSolution]) -> 'SolvingPipeline':
+        return self.__add(lambda state: SolverResult(state.network, transformer.transform(state.solution)))
     
     def use_initial_network(self) -> 'SolvingPipeline':
         return self.__add(lambda state: SolverResult(self.network, state.solution))

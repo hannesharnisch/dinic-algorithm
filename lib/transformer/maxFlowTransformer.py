@@ -5,7 +5,7 @@ from lib.transformer.transformer import Transformer
 import copy
 import math
 
-class MaxFlowTransformer(Transformer):
+class MaxFlowTransformer(Transformer[Network]):
     def transform(self, network: Network) -> Network:
         """
         Function should get a min-cost-flow-network and convert it into a max-flow-network

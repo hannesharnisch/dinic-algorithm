@@ -4,7 +4,7 @@ from lib.networkInput import NetworkInput
 from lib.network.network import Network
 from lib import helper
 from lib.solver.dinicSolver import DinicSolver
-from lib.solver.gurobiInitialSolver import GurobiInitialSolver
+from lib.solver.gurobiMaxFlowSolver import GurobiMaxFlowSolver
 from lib.solver.gurobiNetworkSimplexSolver import GurobiNetworkSimplexSolver
 from lib.solvingPipeline import SolvingPipeline
 from lib.transformer.maxFlowTransformer import MaxFlowTransformer
@@ -32,7 +32,7 @@ if __name__ == '__main__':
         pipeline.apply_solver(DinicSolver())
     elif settings.get_solver_method() == 'Gurobi':
         print('Selected solover method:' + settings.get_solver_method())
-        pipeline.apply_solver(GurobiInitialSolver())
+        pipeline.apply_solver(GurobiMaxFlowSolver())
     else:
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
     pipeline.transform_network(MinCostFlowTransformer())

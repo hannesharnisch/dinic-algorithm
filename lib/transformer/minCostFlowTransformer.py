@@ -3,7 +3,7 @@ from lib.network.network import Network
 from lib.transformer.transformer import Transformer
 import copy
 
-class MinCostFlowTransformer(Transformer):
+class MinCostFlowTransformer(Transformer[Network]):
     def transform(self, network: Network) -> Network:
         """
         Function transforms a max-flow-network into a min-cost-flow-network

@@ -4,7 +4,7 @@ from lib.solver.solverResult import SolverResult
 import gurobipy as gp
 
 
-class GurobiInitialSolver(Solver):
+class GurobiMaxFlowSolver(Solver):
     def solve(self, network: Network) -> SolverResult:
         # TODO: implement Max Flow Solver
         return SolverResult(network=network)
