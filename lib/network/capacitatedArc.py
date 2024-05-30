@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Optional, Tuple
 from lib.network.graph.baseArc import BaseArc
 
 @dataclass
@@ -11,3 +11,4 @@ class Capacity:
 class CapacitatedArc(BaseArc):
     capacity: Capacity
     cost: int
+    flow: Optional[int] = 0

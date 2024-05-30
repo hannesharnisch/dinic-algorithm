@@ -14,12 +14,12 @@ class MinCostFlowTransformer(Transformer[Network]):
 
         for arc in self.__getArcsFromSource(networkCopy.arcs):
             to_node = networkCopy.get_node(arc.to_node)
-            to_node.demand = -arc.capacity # Set negative demand for node
+            to_node.demand = -arc.capacity.ub # Set negative demand for node
             networkCopy.remove_arc(arc.from_node, arc.to_node)
 
         for arc in self.__getArcsToTarget(networkCopy.arcs):
             from_node = networkCopy.get_node(arc.from_node)
-            from_node.demand = arc.capacity
+            from_node.demand = arc.capacity.ub
             networkCopy.remove_arc(arc.from_node, arc.to_node)
 
         networkCopy.remove_node(networkCopy.get_node("s"))

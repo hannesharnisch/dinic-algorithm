@@ -1,3 +1,4 @@
+from lib.network.capacitatedArc import Capacity
 from lib.network.network import Network
 from lib.network.network import Node
 from lib.network.network import CapacitatedArc
@@ -27,11 +28,11 @@ class MaxFlowTransformer(Transformer[Network]):
             
             if n.demand < 0:
                 # Add arc from source
-                networkCopy.add_arc(CapacitatedArc("s", n.id, abs(n.demand), 0))
+                networkCopy.add_arc(CapacitatedArc("s", n.id, Capacity(ub=abs(n.demand)), 0))
 
             if n.demand > 0:
                 #Add arc to target
-                networkCopy.add_arc(CapacitatedArc(n.id, "t", n.demand, 0))
+                networkCopy.add_arc(CapacitatedArc(n.id, "t", Capacity(ub=n.demand), 0))
             
             n.demand = 0 # Set demand to 0
 
