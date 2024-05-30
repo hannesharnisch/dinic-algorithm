@@ -65,5 +65,6 @@ class Graph(Generic[N, A]):
     def is_adjacent(self, from_node: NodeID, to_node: NodeID) -> bool:
         return to_node in self.__adjacency_list[from_node]
     
+    @property
     def neighbors(self, node_id: NodeID) -> list[N]:
         return self.__adjacency_list[node_id].map(lambda x: self.__nodes[x])
