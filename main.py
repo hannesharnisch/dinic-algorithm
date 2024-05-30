@@ -28,15 +28,15 @@ if __name__ == '__main__':
     pipeline = SolvingPipeline(network)
     pipeline.transform_network(MaxFlowTransformer())
     if settings.get_solver_method() ==  'Dinic':
-        print('Selected solover method: ' + settings.get_solver_method())
+        print('Selected solver method: ' + settings.get_solver_method())
         pipeline.apply_solver(DinicSolver())
     elif settings.get_solver_method() == 'Gurobi':
-        print('Selected solover method:' + settings.get_solver_method())
+        print('Selected solver method:' + settings.get_solver_method())
         pipeline.apply_solver(GurobiMaxFlowSolver())
     else:
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
-    # pipeline.transform_network(MinCostFlowTransformer())
-    # pipeline.apply_solver(GurobiMinCostFlowSolver())
+    pipeline.use_initial_network()
+    pipeline.apply_solver(GurobiMinCostFlowSolver())
     pipeline.run()
     network_flow = pipeline.result
     print('Done')

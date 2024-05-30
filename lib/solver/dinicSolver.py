@@ -11,7 +11,7 @@ class DinicSolver(Solver):
 
     def solve(self, state: SolverState) -> SolverState:
         # TODO: implement Dinic Algorithm
-        flow = 0
+        total_flow = 0
 
         while self.assign_levels_while_path_exists(state.network):
 
@@ -19,7 +19,7 @@ class DinicSolver(Solver):
             max_flow = self.get_max_flow(path, state.network)
             self.load_path(path, state.network, max_flow)
 
-            flow += max_flow
+            total_flow += max_flow
         
             # print("path", path)
             # print("flow", max_flow)
@@ -31,11 +31,14 @@ class DinicSolver(Solver):
             # print()
             # 
             # print("Levels", self.levels)
+            flow = {}
+            for arc in state.network.arcs:
+                if arc.from_node == "s":
+                    flow[(arc.to_node,arc.from_node)] = abs(arc.flow)
 
-        return SolverState(network=state.network,solution=SolverSolution(flow=flow))
+        return SolverState(network=state.network, solution=SolverSolution(flow=flow, target_value=total_flow))
   
     def rek_get_path(self, network: Network, source: NodeID = "s", sink: NodeID="t") -> list[NodeID]:
-         
         if source == sink:
             return []
         for neighbor in network.neighbors(source):

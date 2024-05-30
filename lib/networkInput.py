@@ -4,8 +4,9 @@ from lib.network.node import Node
 
 
 class NetworkInput:
-    nodes: list[Node] = []
-    arcs: list[CapacitatedArc] = []
+    def __init__(self):
+        self.nodes: list[Node] = []
+        self.arcs: list[CapacitatedArc] = []
     
     def load_data_from_txt_file(self, data_path_and_name: str) :
         with open(data_path_and_name, 'r') as file:

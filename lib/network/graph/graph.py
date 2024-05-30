@@ -1,3 +1,4 @@
+import copy
 from typing import Tuple, TypeVar, Generic
 from lib.network.graph.identifiable import NodeID
 from lib.network.graph.baseArc import BaseArc
@@ -7,15 +8,17 @@ N = TypeVar('N', bound=Identifiable)
 A = TypeVar('A', bound=BaseArc)
 
 class Graph(Generic[N, A]):
-    __nodes: dict[NodeID, N] = {}
-    __arcs: dict[Tuple[NodeID, NodeID], A] = {}
-    __adjacency_list: dict[NodeID, list[NodeID]] = {}
 
     def __init__(self, nodes: list[N] = [], arcs: list[A] = []):
+        self.__nodes: dict[NodeID, N] = {}
+        self.__arcs: dict[Tuple[NodeID, NodeID], A] = {}
+        self.__adjacency_list: dict[NodeID, list[NodeID]] = {}
+        
         for node in nodes:
             self.add_node(node)
         for arc in arcs:
             self.add_arc(arc)
+
     @property
     def nodes(self) -> list[N]:
         return self.__nodes.values()
@@ -36,14 +39,9 @@ class Graph(Generic[N, A]):
 
     def remove_node(self, node: N):
         self.__nodes.pop(node.id)
-
         arcs_to_remove = filter(lambda arc: arc.from_node == node.id or arc.to_node == node.id, self.__arcs.values())
-
         for arc in list(arcs_to_remove):
             self.remove_arc(arc.from_node, arc.to_node)
-        for key, adjacent_nodes in self.__adjacency_list.items():
-            if node.id in adjacent_nodes:
-                self.__adjacency_list[key].remove(node.ID)
         self.__adjacency_list.pop(node.id)
 
 

@@ -1,6 +1,7 @@
 
 
 
+import copy
 from typing import Callable
 from lib.network.network import Network
 from lib.solver.solver import Solver
@@ -25,15 +26,16 @@ class SolvingPipeline:
         return self.__add(lambda state: SolverState(state.network, transformer.transform(state.solution)))
     
     def use_initial_network(self) -> 'SolvingPipeline':
-        return self.__add(lambda state: SolverState(self.network, state.solution))
+        return self.__add(lambda state: SolverState(network=copy.deepcopy(self.network), solution=state.solution))
 
     def __add(self, func: Callable[[SolverState], SolverState]) -> 'SolvingPipeline':
         self.__pipeline.append(func)
         return self
 
     def run(self) -> 'SolvingPipeline':
-        state = SolverState(self.network)
+        state = SolverState(copy.deepcopy(self.network))
         for func in self.__pipeline:
-            state = func(state)
+            new_state = func(state)
+            state = new_state if new_state != None else state
         self.result = state
         return self
