@@ -6,7 +6,7 @@ from lib.network.graph.identifiable import NodeID
 
 @dataclass
 class SolverSolution:
-    flow: Tuple[NodeID, NodeID]
+    flow: dict[Tuple[NodeID, NodeID], int]
     target_value: int = 0
     
     def __str__(self) -> str:
