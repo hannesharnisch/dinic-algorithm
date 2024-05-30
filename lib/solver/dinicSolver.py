@@ -12,7 +12,7 @@ class DinicSolver(Solver):
     def solve(self, network: Network) -> SolverResult:
         # TODO: implement Dinic Algorithm
 
-        return SolverResult(network=network, cost=0, flow=0)
+        return SolverResult(network=network)
     
     def assign_levels_while_path_exists(self, network: Network, source: NodeID = "s", sink: NodeID = "t") -> bool:
         for n in network.nodes:

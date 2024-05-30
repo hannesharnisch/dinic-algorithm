@@ -26,17 +26,17 @@ if __name__ == '__main__':
     print('Done')
     print('Start solving MinCostFlow...')
     pipeline = SolvingPipeline(network)
-    pipeline.transformNetwork(MaxFlowTransformer())
+    pipeline.transform_network(MaxFlowTransformer())
     if settings.get_solver_method() ==  'Dinic':
         print('Selected solover method: ' + settings.get_solver_method())
-        pipeline.applySolver(DinicSolver())
+        pipeline.apply_solver(DinicSolver())
     elif settings.get_solver_method() == 'Gurobi':
         print('Selected solover method:' + settings.get_solver_method())
-        pipeline.applySolver(GurobiInitialSolver())
+        pipeline.apply_solver(GurobiInitialSolver())
     else:
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
-    pipeline.transformNetwork(MinCostFlowTransformer())
-    pipeline.applySolver(GurobiNetworkSimplexSolver())
+    pipeline.transform_network(MinCostFlowTransformer())
+    pipeline.apply_solver(GurobiNetworkSimplexSolver())
     pipeline.run()
     network_flow = pipeline.result
     print('Done')

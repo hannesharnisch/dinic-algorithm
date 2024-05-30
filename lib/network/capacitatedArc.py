@@ -6,7 +6,6 @@ from lib.network.graph.baseArc import BaseArc
 class Capacity:
     ub:int
     lb:int = 0
-    current: int = 0
 
 @dataclass
 class CapacitatedArc(BaseArc):
