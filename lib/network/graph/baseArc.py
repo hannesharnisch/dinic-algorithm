@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from lib.network.graph.identifiable import Identifiable
+from lib.network.graph.identifiable import Identifiable, NodeID
 
 @dataclass
 class BaseArc:
-    from_node: int
-    to_node: int
+    from_node: NodeID
+    to_node: NodeID
