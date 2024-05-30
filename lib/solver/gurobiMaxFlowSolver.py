@@ -5,6 +5,6 @@ import gurobipy as gp
 
 
 class GurobiMaxFlowSolver(Solver):
-    def solve(self, network: Network) -> SolverState:
+    def solve(self, state: SolverState) -> SolverState:
         # TODO: implement Max Flow Solver
-        return SolverState(network=network)
+        return state

@@ -16,7 +16,7 @@ class SolvingPipeline:
         self.result = None
 
     def apply_solver(self, solver: Solver) -> 'SolvingPipeline':
-        return self.__add(lambda state: solver.solve(state.network))
+        return self.__add(lambda state: solver.solve(state))
     
     def transform_network(self, transformer: Transformer[Network]) -> 'SolvingPipeline':
         return self.__add(lambda state: SolverState(transformer.transform(state.network), state.solution))
