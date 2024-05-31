@@ -27,11 +27,6 @@ class DinicSolver(Solver):
             total_flow += max_flow
         
         flow = self.get_final_flow()
-
-
-        print("network", self.dinic_network.arcs)
-        print("flow",flow)
-        print("total_flow",total_flow)
      
         return SolverState(network=state.network, solution=SolverSolution(flow=flow, target_value=total_flow))
     

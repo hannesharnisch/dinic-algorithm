@@ -53,11 +53,7 @@ class GurobiMinCostFlowSolver(Solver):
 
         # Output the results
         if model.status != GRB.OPTIMAL:
-            print('No optimal solution found.')
             return None
-    
-        print('Optimal solution found:')
-        # Create solver solution
 
         return SolverState(
             network = state.network,

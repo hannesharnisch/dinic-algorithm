@@ -37,7 +37,7 @@ if __name__ == '__main__':
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
     pipeline.use_initial_network()
     pipeline.apply_solver(GurobiMinCostFlowSolver())
-    pipeline.run()
+    pipeline.run(debug=True)
     network_flow = pipeline.result
     print('Done')
     print('Generating output...')

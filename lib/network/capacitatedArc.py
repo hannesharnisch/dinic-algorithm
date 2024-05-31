@@ -12,3 +12,6 @@ class CapacitatedArc(BaseArc):
     capacity: Capacity
     cost: int
     flow: Optional[int] = 0
+
+    def __str__(self) -> str:
+        return f"{self.from_node} -> {self.to_node} (lb={self.capacity.lb}, ub={self.capacity.ub}, c={self.cost})"
