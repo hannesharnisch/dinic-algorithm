@@ -1,3 +1,4 @@
+import os
 import time
 from lib.settings import Settings
 from lib.networkInput import NetworkInput
@@ -12,6 +13,11 @@ from lib.transformer.minCostFlowTransformer import MinCostFlowTransformer
 
 
 if __name__ == '__main__':
+    # Check if the Gurobi license file exists
+    if os.path.isfile('/workspaces/dinic-algorithm/gurobi.lic'):
+        # Set the environment variable for Gurobi
+        os.environ['GRB_LICENSE_FILE'] = '/workspaces/dinic-algorithm/gurobi.lic'
+
     start_time = time.time()
     print('Loading settings...')
     settings = Settings()
@@ -37,7 +43,7 @@ if __name__ == '__main__':
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
     pipeline.use_initial_network()
     pipeline.apply_solver(GurobiMinCostFlowSolver())
-    pipeline.run(debug=True)
+    pipeline.run(debug=False)
     network_flow = pipeline.result
     print('Done')
     print('Generating output...')

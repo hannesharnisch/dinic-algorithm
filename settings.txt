@@ -4,7 +4,7 @@
 ########################
 
 #Insert data path of instance to solve:
-data_path = [Data/chvatal_small.json]
+data_path = [Data/netgen_8_08a.json]
 
 #Select solver mode - XX | YY 
 solver_method = [Dinic]

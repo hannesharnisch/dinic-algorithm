@@ -20,19 +20,22 @@ class Pipe:
     func: Callable[[SolverState], SolverState]
 
     def apply(self, state: SolverState, debug:bool = False) -> SolverState:
-        print_when_debug(debug, "Running pipe: " + self.name)
-        print_when_debug(debug, "Network: \n" + "\n".join(map(str,state.network.arcs)))
-        if state.solution: print_when_debug(debug, "Solution: \n" + str(state.solution))
-        
-        new_state = self.func(state)
-        if new_state == None:
-            print(f"Pipe {self.name} returned no new result - continuing with old state.")
-            return state
-        
-        print_when_debug(debug, "New Network: \n" + "\n".join(map(str,new_state.network.arcs)))
-        if new_state.solution: print_when_debug(debug, "New Solution: \n" + str(new_state.solution))
-        
-        return new_state
+        try:
+            print_when_debug(debug, "Running pipe: " + self.name)
+            print_when_debug(debug, "Network: \n" + "\n".join(map(str,state.network.arcs)))
+            if state.solution: print_when_debug(debug, "Solution: \n" + str(state.solution))
+            
+            new_state = self.func(state)
+            if new_state == None:
+                print(f"Pipe {self.name} returned no new result - continuing with old state.")
+                return state
+            
+            print_when_debug(debug, "New Network: \n" + "\n".join(map(str,new_state.network.arcs)))
+            if new_state.solution: print_when_debug(debug, "New Solution: \n" + str(new_state.solution))
+            
+            return new_state
+        except Exception as e:
+            raise Exception(f"Error in pipe {self.name}: \n{e}")
 
 class SolvingPipeline:
 
@@ -43,19 +46,19 @@ class SolvingPipeline:
 
     def apply_solver(self, solver: Solver) -> 'SolvingPipeline':
         return self.__add(
-                name= "Solver: " + type(solver).__name__, 
+                name= "Solver-" + type(solver).__name__, 
                 func= lambda state: solver.solve(state)
             )
     
     def transform_network(self, transformer: Transformer[Network]) -> 'SolvingPipeline':
         return self.__add(
-                name= "Networktransformer: " + type(transformer).__name__,
+                name= "Networktransformer-" + type(transformer).__name__,
                 func= lambda state: SolverState(transformer.transform(state.network), state.solution)
             )
     
     def transform_solution(self, transformer: Transformer[SolverSolution]) -> 'SolvingPipeline':
         return self.__add(
-                name= "Solutiontransformer: " + type(transformer).__name__,
+                name= "Solutiontransformer-" + type(transformer).__name__,
                 func= lambda state: SolverState(state.network, transformer.transform(state.solution))
             )
     
