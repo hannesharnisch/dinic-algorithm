@@ -37,10 +37,17 @@ class GurobiMaxFlowSolver(Solver):
         if max_flow.status != gp.GRB.OPTIMAL:
             return None
 
+
+
+        solution_flow = {}
+        for arc, modelVar in variables.items():
+            if(modelVar.x > 0):
+                solution_flow[arc] = int(modelVar.x)
+        
         return SolverState(
             network = state.network,
             solution = SolverSolution(
-                flow={arc: modelVar.x for arc, modelVar in variables.items()}, 
+                flow=solution_flow, 
                 target_value=max_flow.ObjVal
             )
         )

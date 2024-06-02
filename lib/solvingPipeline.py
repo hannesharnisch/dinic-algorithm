@@ -8,6 +8,7 @@ from lib.network.network import Network
 from lib.solver.solver import Solver
 from lib.solver.solverState import SolverState, SolverSolution
 from lib.transformer.transformer import Transformer
+from lib.visualizer.plotter import Plotter
 
 
 def print_when_debug(debug: bool, message: str) -> None:
@@ -48,6 +49,12 @@ class SolvingPipeline:
         return self.__add(
                 name= "Solver-" + type(solver).__name__, 
                 func= lambda state: solver.solve(state)
+            )
+    
+    def apply_plotter(self, plotter: Plotter, file_name: str) -> 'SolvingPipeline':
+        return self.__add(
+                name= "Plotter-" + type(plotter).__name__,
+                func= lambda state: plotter.plot(file_name, state)
             )
     
     def transform_network(self, transformer: Transformer[Network]) -> 'SolvingPipeline':

@@ -54,11 +54,16 @@ class GurobiMinCostFlowSolver(Solver):
         # Output the results
         if model.status != GRB.OPTIMAL:
             return None
+        
+        solution_flow = {}
+        for arc, modelVar in flow.items():
+            if(modelVar.x > 0):
+                solution_flow[arc] = int(modelVar.x)
 
         return SolverState(
             network = state.network,
             solution = SolverSolution(
-                flow={arc: modelVar.x for arc, modelVar in flow.items()}, 
+                flow=solution_flow, 
                 target_value=model.ObjVal
             )
         )
