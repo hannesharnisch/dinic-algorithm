@@ -7,7 +7,7 @@ from lib.network.graph.identifiable import NodeID
 @dataclass
 class SolverSolution:
     flow: dict[Tuple[NodeID, NodeID], int]
-    target_value: int = 0
+    target_value: float = 0
     
     def __str__(self) -> str:
         return "Target: " + str(self.target_value) + ", Flow: " + str(self.flow)

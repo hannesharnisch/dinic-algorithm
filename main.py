@@ -1,5 +1,7 @@
 import os
 import time
+from lib.exporter.plotExporter import PlotExporter
+from lib.exporter.textExporter import TextExporter
 from lib.settings import Settings
 from lib.networkInput import NetworkInput
 from lib.network.network import Network
@@ -10,7 +12,6 @@ from lib.solver.gurobiMinCostFlowSolver import GurobiMinCostFlowSolver
 from lib.solvingPipeline import SolvingPipeline
 from lib.transformer.maxFlowTransformer import MaxFlowTransformer
 from lib.transformer.minCostFlowTransformer import MinCostFlowTransformer
-from lib.visualizer.plotter import Plotter
 
 
 if __name__ == '__main__':
@@ -37,16 +38,19 @@ if __name__ == '__main__':
     if settings.get_solver_method() ==  'Dinic':
         print('Selected solver method: ' + settings.get_solver_method())
         pipeline.apply_solver(DinicSolver())
-        pipeline.apply_plotter(Plotter(), '/Dinic/MaxFlow')
+        pipeline.export_to_file(TextExporter(), '/Dinic/MaxFlow')
+        pipeline.export_to_file(PlotExporter(), '/Dinic/MaxFlow')
     elif settings.get_solver_method() == 'Gurobi':
         print('Selected solver method:' + settings.get_solver_method())
         pipeline.apply_solver(GurobiMaxFlowSolver())
-        pipeline.apply_plotter(Plotter(), '/Gurobi/MaxFlow')
+        pipeline.export_to_file(TextExporter(), '/Gurobi/MaxFlow')
+        pipeline.export_to_file(PlotExporter(), '/Gurobi/MaxFlow')
     else:
         raise ValueError('Invalid solver method:' + settings.get_solver_method())
     pipeline.use_initial_network()
     pipeline.apply_solver(GurobiMinCostFlowSolver())
-    pipeline.apply_plotter(Plotter(), '/Gurobi/MinCostFlow')
+    pipeline.export_to_file(PlotExporter(), '/Gurobi/MinCostFlow')
+    pipeline.export_to_file(TextExporter(), '/Gurobi/MinCostFlow')
     pipeline.run(debug=False)
     network_flow = pipeline.result
     print('Done')

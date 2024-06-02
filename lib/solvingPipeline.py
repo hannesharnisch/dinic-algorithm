@@ -4,11 +4,11 @@
 import copy
 from dataclasses import dataclass
 from typing import Callable
+from lib.exporter.exporter import Exporter
 from lib.network.network import Network
 from lib.solver.solver import Solver
 from lib.solver.solverState import SolverState, SolverSolution
 from lib.transformer.transformer import Transformer
-from lib.visualizer.plotter import Plotter
 
 
 def print_when_debug(debug: bool, message: str) -> None:
@@ -51,10 +51,10 @@ class SolvingPipeline:
                 func= lambda state: solver.solve(state)
             )
     
-    def apply_plotter(self, plotter: Plotter, file_name: str) -> 'SolvingPipeline':
+    def export_to_file(self, exporter: Exporter, file_name: str) -> 'SolvingPipeline':
         return self.__add(
-                name= "Plotter-" + type(plotter).__name__,
-                func= lambda state: plotter.plot(file_name, state)
+                name= "Plotter-" + type(Exporter).__name__,
+                func= lambda state: exporter.export(file_name=file_name, state=state)
             )
     
     def transform_network(self, transformer: Transformer[Network]) -> 'SolvingPipeline':

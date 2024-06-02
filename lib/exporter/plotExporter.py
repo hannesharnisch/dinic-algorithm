@@ -1,16 +1,16 @@
-# importing networkx 
+import os
 import networkx as nx
-# importing matplotlib.pyplot
 import matplotlib.pyplot as plt
 
+from lib.exporter.exporter import Exporter
 from lib.solver.solverState import SolverState
 
 
-class Plotter:
+class PlotExporter(Exporter):
     def __init__(self):
         pass
 
-    def plot(self, filename: str, state: SolverState) -> SolverState:
+    def export(self, state: SolverState, file_name: str) -> SolverState:
 
         G = nx.DiGraph()
         edge_list_solution = []
@@ -62,7 +62,9 @@ class Plotter:
         plt.title("Target Value: " + str(state.solution.target_value))
 
 
-        plt.savefig(f"./Output/{filename}.png")
+        file_path = f'./Output/{file_name}.png'
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)                
+        plt.savefig(file_path)
 
         plt.clf() 
 

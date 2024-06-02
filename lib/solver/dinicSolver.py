@@ -15,7 +15,7 @@ class DinicSolver(Solver):
     def solve(self, state: SolverState) -> SolverState:
 
         self.dinic_network = copy.deepcopy(state.network)
-        total_flow = 0
+        total_flow = 0.0
 
 
         while self.assign_levels_while_path_exists():
