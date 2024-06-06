@@ -1,32 +1,26 @@
-class Settings:
-  def __init__(self):
-    self.__data_path = ''
-    self.__solver_method = ''
+from enum import Enum
+from pathlib import Path
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-  def get_data_path(self):
-    return self.__data_path
-  
-  def get_solver_method(self):
-    return self.__solver_method
-  
-  def import_settings_from_txt_file(self, settings_extension = ""):
-    print('Importing settings...')
-    settings_file_name = "settings" + settings_extension + ".txt"
-    settings_file = open(settings_file_name, 'r')
-    settings_dict = {'data_path' : ''
-                     ,'solver_method' : ''
-                    }       
-    for line in settings_file:
-      key = line.partition(' ')[0]
-      if key in settings_dict:
-        if type(settings_dict[key]) is int:
-          settings_dict[key] = int(line.partition('[')[-1].partition(']')[0])
-        elif type(settings_dict[key]) is bool:
-          settings_dict[key] = line.partition('[')[-1].partition(']')[0] == 'True'
-        elif type(settings_dict[key]) is float:
-          settings_dict[key] = float(line.partition('[')[-1].partition(']')[0])
-        else:
-          settings_dict[key] = line.partition('[')[-1].partition(']')[0]
-          
-    self.__data_path = settings_dict['data_path']
-    self.__solver_method = settings_dict['solver_method']
+    
+
+
+DOTENV = Path.joinpath(Path(__file__).parent.parent.resolve(), ".env")
+
+class SolverMethod(str, Enum):
+    Dinic = "Dinic"
+    Gurobi = "Gurobi"
+
+class Settings(BaseSettings):
+    data_path: str = Field("Data/chvatal_small.json", env="DATA_PATH")
+    solver_method: SolverMethod = Field(SolverMethod.Dinic, env="SOLVER_METHOD")
+    plot_dinic_steps: bool = Field(False, env="PLOT_DINIC_STEPS")
+    plot_output: bool = Field(False, env="PLOT_OUTPUT")
+    use_initial_solution: bool = Field(False, env="USE_INITIAL_SOLUTION")
+    grb_license_file: str = Field("", env="GRB_LICENSE_FILE") 
+
+    model_config = SettingsConfigDict(env_file=DOTENV)
+    
+
+settings = Settings()

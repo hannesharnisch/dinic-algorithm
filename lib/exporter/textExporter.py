@@ -15,7 +15,8 @@ class TextExporter(Exporter):
         
         res = {
             "target_value": state.solution.target_value,
-            "flow": self.remap_keys(state.solution.flow)
+            "calc_duration": state.solution.calc_duration.total_seconds(),
+            "flow": self.remap_keys(state.solution.flow),
         }
 
         file_path = f'./Output/{file_name}.json'
