@@ -41,7 +41,7 @@ class DinicSolver(Solver):
 
         end = datetime.now()
 
-        print(f"Dinic: Calculation duration: {end-start}")
+        print(f"Dinic - Calculation duration: {end-start}")
 
         return SolverState(network=state.network, solution=SolverSolution(flow=flow, target_value=total_flow, calc_duration=end-start))
 

@@ -50,7 +50,8 @@ def create_pipeline():
     pipeline.use_initial_network()
     pipeline.apply_solver(GurobiMinCostFlowSolver(settings.use_initial_solution))
     export(pipeline, '/Gurobi/MinCostFlow')
-    print('...')
+    
+    print()
 
     return pipeline
 
