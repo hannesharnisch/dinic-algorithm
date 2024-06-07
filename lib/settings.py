@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     plot_output: bool = Field(False, env="PLOT_OUTPUT")
     use_initial_solution: bool = Field(False, env="USE_INITIAL_SOLUTION")
     grb_license_file: str = Field("", env="GRB_LICENSE_FILE") 
+    log_level: str = Field("INFO", env="LOG_LEVEL")
 
     model_config = SettingsConfigDict(env_file=DOTENV)
-    
 
 settings = Settings()

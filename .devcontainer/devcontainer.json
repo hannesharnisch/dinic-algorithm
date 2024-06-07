@@ -6,7 +6,7 @@
     "vscode": {
       "settings": {
         "[python]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.defaultFormatter": "ms-python.autopep8",
           "editor.codeActionsOnSave": {
             "source.organizeImports.ruff": "explicit"
           },
@@ -19,6 +19,7 @@
       },
       "extensions": [
         "esbenp.prettier-vscode",
+        "ms-python.autopep8",
         "github.copilot",
         "eamodio.gitlens"
       ]

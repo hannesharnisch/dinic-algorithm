@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from loguru import logger
 from lib.network.capacitatedArc import CapacitatedArc
 from lib.network.network import Network
 from lib.solver.solver import Solver
@@ -56,7 +58,7 @@ class GurobiMaxFlowSolver(Solver):
         
                 end = datetime.now()
         
-                print(f"Gurobi Max - Calculation duration: {end-start}")
+                logger.success(f"Gurobi Max - Calculation duration: {end-start}")
         
                 return SolverState(
                     network=state.network,

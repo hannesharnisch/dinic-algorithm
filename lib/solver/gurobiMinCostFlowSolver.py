@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from loguru import logger
 from lib.solver.solver import Solver
 from lib.solver.solverState import SolverState, SolverSolution
 import gurobipy as gp
@@ -75,7 +77,7 @@ class GurobiMinCostFlowSolver(Solver):
     
                 end = datetime.now()
     
-                print(f"Gurobi Min - Calculation duration: {end-start}")
+                logger.success(f"Gurobi Min - Calculation duration: {end-start}")
     
                 return SolverState(
                     network=state.network,

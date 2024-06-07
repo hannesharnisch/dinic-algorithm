@@ -1,6 +1,8 @@
 
 import os
 from typing import Tuple
+
+from loguru import logger
 from lib.exporter.exporter import Exporter
 from lib.network.graph.identifiable import NodeID
 from lib.solver.solverState import SolverState
@@ -13,6 +15,8 @@ class TextExporter(Exporter):
 
     def export(self, state: SolverState, file_name: str="result") -> str:
         
+        logger.info("writing to file...")
+
         res = {
             "target_value": state.solution.target_value,
             "calc_duration": state.solution.calc_duration.total_seconds(),

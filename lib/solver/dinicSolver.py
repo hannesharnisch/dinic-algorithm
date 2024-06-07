@@ -2,6 +2,8 @@ import copy
 from datetime import datetime
 from math import inf
 from typing import Tuple
+
+from loguru import logger
 from lib.settings import settings
 from lib.exporter.plotExporter import PlotExporter
 from lib.network.capacitatedArc import CapacitatedArc, Capacity
@@ -41,7 +43,7 @@ class DinicSolver(Solver):
 
         end = datetime.now()
 
-        print(f"Dinic - Calculation duration: {end-start}")
+        logger.success(f"Dinic - Calculation duration: {end-start}")
 
         return SolverState(network=state.network, solution=SolverSolution(flow=flow, target_value=total_flow, calc_duration=end-start))
 
