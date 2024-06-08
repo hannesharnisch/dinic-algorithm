@@ -22,10 +22,10 @@ class DinicSolver(Solver):
                                           solution=None), f"/Dinic/Steps/iteration_{iteration}", f"Dinic - Iteration {iteration}")
 
     def solve(self, state: SolverState) -> SolverState:
+        self.dinic_network = copy.deepcopy(state.network)
 
         start = datetime.now()
 
-        self.dinic_network = copy.deepcopy(state.network)
         total_flow = 0.0
         i = 1
 
