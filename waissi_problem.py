@@ -1,3 +1,4 @@
+import sys
 from lib.network.capacitatedArc import CapacitatedArc, Capacity
 from lib.network.network import Network
 from lib.network.node import Node
@@ -6,9 +7,7 @@ from lib.solver.dinicSolver import DinicSolver
 from lib.solver.solverState import SolverState
 
 
-def generate_problem_network_and_solve():
-    # n = 8192
-    n = 9
+def generate_problem_network_and_solve(n):
 
     # Add the initial source and target nodes and the start arc
     network = Network(NetworkInput())
@@ -32,14 +31,18 @@ def generate_problem_network_and_solve():
     print("Starting solving...")
 
     solutionState = dinicSolver.solve(state=state)
-    print("Solution:")
-    print(solutionState.solution.calc_duration)
+    print("Solution time:")
+    print(f"{solutionState.solution.calc_duration.total_seconds() * 1000} ms")
     sum = 0
     for arc in solutionState.solution.flow.keys():
         if (arc[1] == "t"):
             sum = sum + solutionState.solution.flow[arc]
 
+    print("Solution Max Flow:")
     print(sum)
 
 if __name__ == "__main__":
-    generate_problem_network_and_solve()
+    n = 8192
+
+    sys.setrecursionlimit(9000) # Recursion limit has to be enhanced for this
+    generate_problem_network_and_solve(n)
