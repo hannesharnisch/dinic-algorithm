@@ -1,4 +1,5 @@
 import os
+from loguru import logger
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -15,9 +16,9 @@ class PlotExporter(Exporter):
         G = nx.DiGraph()
         edge_list_solution, edge_list_unused, edge_list_back = [], [], []
 
-        node_size = 1000
+        node_size = 800
 
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(15, 15))
 
         for arc in state.network.arcs:
             if state.solution:
@@ -30,7 +31,6 @@ class PlotExporter(Exporter):
                     flow = 0
                     edge_list_unused.append((arc.from_node, arc.to_node))
 
-                G.add_edge(arc.from_node, arc.to_node, flow=flow)
             else:
                 if arc.flow > 0:
                     flow = f"({arc.flow}, {arc.capacity.ub})"
@@ -42,7 +42,7 @@ class PlotExporter(Exporter):
                     flow = f""
                     edge_list_unused.append((arc.from_node, arc.to_node))
 
-                G.add_edge(arc.from_node, arc.to_node, flow=flow)
+            G.add_edge(arc.from_node, arc.to_node, flow=flow)
 
         pos = nx.kamada_kawai_layout(G)
 
