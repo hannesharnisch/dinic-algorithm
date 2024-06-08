@@ -17,8 +17,9 @@ class DinicSolver(Solver):
     levels: dict[NodeID, int] = {}
     dinic_network: Network
 
-    def plot(self, flow) -> None:
-        PlotExporter().export(SolverState(network=self.dinic_network, solution=None), f"/Dinic/Steps/flow_{flow}")
+    def plot(self, iteration: int) -> None:
+        PlotExporter().export(SolverState(network=self.dinic_network,
+                                          solution=None), f"/Dinic/Steps/iteration_{iteration}", f"Dinic - Iteration {iteration}")
 
     def solve(self, state: SolverState) -> SolverState:
 
@@ -26,6 +27,7 @@ class DinicSolver(Solver):
 
         self.dinic_network = copy.deepcopy(state.network)
         total_flow = 0.0
+        i = 1
 
         while self.assign_levels_while_path_exists():
 
@@ -36,8 +38,9 @@ class DinicSolver(Solver):
             total_flow += max_flow
 
             if settings.plot_dinic_steps:
-                self.plot(total_flow)
-            
+                self.plot(i)
+
+            i += 1
 
         flow = self.get_final_flow()
 

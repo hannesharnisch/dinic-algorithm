@@ -10,19 +10,21 @@ class PlotExporter(Exporter):
     def __init__(self):
         pass
 
-    def export(self, state: SolverState, file_name: str) -> SolverState:
+    def export(self, state: SolverState, file_name: str, title: str = None) -> SolverState:
 
         G = nx.DiGraph()
-        edge_list_solution,edge_list_unused, edge_list_back = [], [], []
-        
-        node_size = 500
+        edge_list_solution, edge_list_unused, edge_list_back = [], [], []
+
+        node_size = 1000
 
         plt.figure(figsize=(10, 10))
 
         for arc in state.network.arcs:
             if state.solution:
                 if (arc.from_node, arc.to_node) in state.solution.flow:
-                    flow = state.solution.flow[arc.from_node, arc.to_node]
+
+                    flow = f"({state.solution.flow[arc.from_node, arc.to_node]}," \
+                        f" {arc.capacity.ub})"
                     edge_list_solution.append((arc.from_node, arc.to_node))
                 else:
                     flow = 0
@@ -31,20 +33,24 @@ class PlotExporter(Exporter):
                 G.add_edge(arc.from_node, arc.to_node, flow=flow)
             else:
                 if arc.flow > 0:
-                    flow=f"({arc.flow}, {arc.capacity.ub})"
+                    flow = f"({arc.flow}, {arc.capacity.ub})"
                     edge_list_solution.append((arc.from_node, arc.to_node))
                 elif arc.flow < 0:
-                    flow=f"({arc.flow}, {arc.capacity.ub})"
-                    edge_list_back.append((arc.from_node, arc.to_node))       
+                    flow = f"({arc.flow}, {arc.capacity.ub})"
+                    edge_list_back.append((arc.from_node, arc.to_node))
                 else:
-                    flow=f""
+                    flow = f""
                     edge_list_unused.append((arc.from_node, arc.to_node))
-                    
+
                 G.add_edge(arc.from_node, arc.to_node, flow=flow)
 
         pos = nx.kamada_kawai_layout(G)
 
         nx.draw_networkx_nodes(G, pos, node_size=node_size)
+
+        connectionstyle = "arc3"
+        if len(edge_list_back) > 0:
+            connectionstyle = "arc3,rad=0.3"
 
         nx.draw_networkx_edges(
             G,
@@ -54,7 +60,7 @@ class PlotExporter(Exporter):
             arrows=True,
             node_size=node_size,
             style='solid',
-            connectionstyle="arc3,rad=0.3",
+            connectionstyle=connectionstyle,
         )
 
         nx.draw_networkx_edges(
@@ -65,7 +71,7 @@ class PlotExporter(Exporter):
             arrows=True,
             node_size=node_size,
             style='solid',
-            connectionstyle="arc3,rad=0.3",
+            connectionstyle=connectionstyle,
             edge_color='blue'
         )
 
@@ -85,10 +91,17 @@ class PlotExporter(Exporter):
         edge_labels = nx.get_edge_attributes(G, 'flow')
 
         # draw edge attributes
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, connectionstyle="arc3,rad=0.3")
+        nx.draw_networkx_edge_labels(
+            G, pos, edge_labels=edge_labels)
+
+        plt.text(1, 0, '(Flow, Upper Bound)', horizontalalignment='right',
+                 verticalalignment='bottom', transform=plt.gca().transAxes)
+
+        if title:
+            plt.title(title)
 
         if state.solution:
-            plt.title("Target Value: " + str(state.solution.target_value))
+            plt.suptitle("Target Value: " + str(state.solution.target_value))
 
         file_path = f'./Output/{file_name}.png'
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
