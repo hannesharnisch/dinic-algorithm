@@ -31,7 +31,9 @@ class DinicSolver(Solver):
 
         while self.assign_levels_while_path_exists():
 
-            path = self.rek_get_path()
+            # path = self.rek_get_path()
+
+            path = self.dfs()
             max_flow = self.get_max_flow(path)
             self.load_path(path, max_flow)
 
@@ -60,7 +62,23 @@ class DinicSolver(Solver):
 
         return res
 
-    def rek_get_path(self, source: NodeID = "s", sink: NodeID = "t") -> list[NodeID]:
+    def dfs(self, source: NodeID = "s", sink: NodeID = "t") -> list[CapacitatedArc]:
+        stack = [(source, [])]  # Stack to store the current path and source
+        while stack:
+            current_node, path = stack.pop()
+
+            if current_node == sink:
+                return path
+
+            for neighbor in self.dinic_network.neighbors(current_node):
+                neighbor_arc = self.dinic_network.get_arc(
+                    current_node, neighbor.id)
+                if self.levels[neighbor.id] == self.levels[current_node] + 1 and neighbor_arc.flow < neighbor_arc.capacity.ub:
+                    stack.append((neighbor.id, path + [neighbor_arc]))
+
+        return None
+
+    def rek_get_path(self, source: NodeID = "s", sink: NodeID = "t") -> list[CapacitatedArc]:
         if source == sink:
             return []
         for neighbor in self.dinic_network.neighbors(source):

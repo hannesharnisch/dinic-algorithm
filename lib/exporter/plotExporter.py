@@ -92,7 +92,7 @@ class PlotExporter(Exporter):
 
         # draw edge attributes
         nx.draw_networkx_edge_labels(
-            G, pos, edge_labels=edge_labels)
+            G, pos, edge_labels=edge_labels, connectionstyle=connectionstyle)
 
         plt.text(1, 0, '(Flow, Upper Bound)', horizontalalignment='right',
                  verticalalignment='bottom', transform=plt.gca().transAxes)
