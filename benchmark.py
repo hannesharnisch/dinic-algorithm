@@ -3,6 +3,10 @@ import json
 import os
 from functools import reduce
 
+"""
+    This file is a benchmark test. You can specify the problem to be tested and the times it should run.
+"""
+
 def run_pipeline(method, data_path):
     if method == "Dinic" or method == "Gurobi":
         update_env_file('.env', 'DATA_PATH', data_path)
@@ -102,7 +106,7 @@ def convert_to_milliseconds(time_dict):
     return {key: f"{value * 1000} ms" for key, value in time_dict.items()}
 
 if __name__ == "__main__":
-    data_path = "Data/netgen_8_08a.json"
+    data_path = "Data/chvatal_small.json"
     times_to_test = 10
 
     dinicResults = []

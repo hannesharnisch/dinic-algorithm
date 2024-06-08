@@ -6,6 +6,9 @@ from lib.networkInput import NetworkInput
 from lib.solver.dinicSolver import DinicSolver
 from lib.solver.solverState import SolverState
 
+"""
+    This file is a benchmark test for the problem proposed by Waissi 1991.
+"""
 
 def generate_problem_network_and_solve(n):
 
