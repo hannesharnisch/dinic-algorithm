@@ -19,9 +19,9 @@ def generate_problem_network_and_solve(n):
     network.add_arc(CapacitatedArc(from_node="s", to_node="t", capacity=Capacity(1, 0), cost=0))
 
     # Add all other nodes depending on how big the Waissi network should be
-    for i in range(n):
+    for i in range(2, n):
         network.add_node(Node(str(i)))
-        if i == 0:
+        if i == 2:
             network.add_arc(CapacitatedArc(from_node="s", to_node=network.get_node(str(i)).id, capacity=Capacity(n, 0), cost=0))
         else:
             network.add_arc(CapacitatedArc(from_node=str(i-1), to_node=network.get_node(str(i)).id, capacity=Capacity(n, 0), cost=0))
