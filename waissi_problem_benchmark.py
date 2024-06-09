@@ -4,13 +4,13 @@ from lib.network.network import Network
 from lib.network.node import Node
 from lib.networkInput import NetworkInput
 from lib.solver.dinicSolver import DinicSolver
+from lib.solver.gurobiMaxFlowSolver import GurobiMaxFlowSolver
 from lib.solver.solverState import SolverState
-
 """
     This file is a benchmark test for the problem proposed by Waissi 1991.
 """
 
-def generate_problem_network_and_solve(n):
+def generate_problem_network(n):
 
     # Add the initial source and target nodes and the start arc
     network = Network(NetworkInput())
@@ -27,25 +27,38 @@ def generate_problem_network_and_solve(n):
             network.add_arc(CapacitatedArc(from_node=str(i-1), to_node=network.get_node(str(i)).id, capacity=Capacity(n, 0), cost=0))
         network.add_arc(CapacitatedArc(from_node=str(i), to_node="t", capacity=Capacity(1, 0), cost=0))
 
+    return network
+
+def solve_problem_network(network, solver):
     state = SolverState(network=network)
 
-    dinicSolver = DinicSolver()
+    if solver == "Gurobi":
+        solver = GurobiMaxFlowSolver()
+    else:
+        solver = DinicSolver()
 
-    print("Starting solving...")
+    return solver.solve(state=state)
 
-    solutionState = dinicSolver.solve(state=state)
-    print("Solution time:")
-    print(f"{solutionState.solution.calc_duration.total_seconds() * 1000} ms")
-    sum = 0
-    for arc in solutionState.solution.flow.keys():
-        if (arc[1] == "t"):
-            sum = sum + solutionState.solution.flow[arc]
+def execute_n_times_and_get_avg(n, network, solver):
+    solutionStates = []
+    for i in range(n):
+        tempSolution = solve_problem_network(network, solver)
+        solutionStates.append(tempSolution)
 
-    print("Solution Max Flow:")
-    print(sum)
+    mappedSolutionStates = map(lambda x: x.solution.calc_duration.total_seconds() * 1000, solutionStates)
+    return sum(mappedSolutionStates) / n
 
 if __name__ == "__main__":
-    n = 8192
+    n = 256
 
-    sys.setrecursionlimit(9000) # Recursion limit has to be enhanced for this
-    generate_problem_network_and_solve(n)
+    network = generate_problem_network(n)
+
+    print("*** GUROBI RESULT: ***")
+    print("Average solution time:")
+    print(f"{execute_n_times_and_get_avg(10, network, "Gurobi")} ms")
+
+
+    print("\n")
+    print("*** DINIC RESULT: ***")
+    print("Average solution time:")
+    print(f"{execute_n_times_and_get_avg(10, network, "Dinic")} ms")
