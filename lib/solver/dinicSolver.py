@@ -106,7 +106,6 @@ class DinicSolver(Solver):
             if arc.capacity.lb < lb:
                 lb = arc.capacity.lb + arc.flow
 
-        # ToDo: Check if lb < ub
         if ub < lb:
             raise Exception
 
