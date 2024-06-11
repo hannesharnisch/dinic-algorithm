@@ -20,7 +20,7 @@ def export(pipeline: SolvingPipeline, file_name: str) -> None:
         pipeline.export_to_file(PlotExporter(), file_name)
 
 
-def create_pipeline():
+def create_default_pipeline():
 
     logger.info('---------------------------------------------')
     logger.info('Loading Inputdata...')
@@ -54,7 +54,28 @@ def create_pipeline():
         settings.use_initial_solution))
     export(pipeline, '/Gurobi/MinCostFlow')
 
-    print()
+    return pipeline
+
+
+def create_benchmark_pipeline():
+
+    logger.info('---------------------------------------------')
+    logger.info('Loading Inputdata...')
+    network_input = NetworkInput()
+    network_input.load_data_from_txt_file(settings.benchmark_path)
+    logger.info('---------------------------------------------')
+
+    logger.info('Start creating Network...')
+    network = Network(network_input)
+    logger.info('---------------------------------------------')
+
+    pipeline = SolvingPipeline(network)
+
+    pipeline.apply_solver(DinicSolver())
+    export(pipeline, '/Benchmark/Dinic')
+
+    pipeline.apply_solver(GurobiMaxFlowSolver())
+    export(pipeline, '/Benchmark/Gurobi')
 
     return pipeline
 
@@ -62,10 +83,13 @@ def create_pipeline():
 if __name__ == '__main__':
 
     init_logging()
-    logger.debug("Debug")
     start_time = time.time()
 
-    pipeline = create_pipeline()
+    if settings.run_benchmark:
+        pipeline = create_benchmark_pipeline()
+    else:
+        pipeline = create_default_pipeline()
+
     pipeline.run()
 
     logger.success('Total time: ' + str(time.time() - start_time) + ' seconds')

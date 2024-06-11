@@ -33,7 +33,7 @@ class DinicSolver(Solver):
 
             # path = self.rek_get_path()
 
-            path = self.dfs()
+            path = self.get_path()
             max_flow = self.get_max_flow(path)
             self.load_path(path, max_flow)
 
@@ -44,7 +44,7 @@ class DinicSolver(Solver):
 
             i += 1
 
-        logger.info(f"Iterations: {i-1}")
+        logger.info(f"Iterations: {i}")
         flow = self.get_final_flow()
 
         end = datetime.now()
@@ -63,7 +63,7 @@ class DinicSolver(Solver):
 
         return res
 
-    def dfs(self, source: NodeID = "s", sink: NodeID = "t") -> list[CapacitatedArc]:
+    def get_path(self, source: NodeID = "s", sink: NodeID = "t") -> list[CapacitatedArc]:
         stack = [(source, [])]  # Stack to store the current path and source
         visited = set()  # Store already visited nodes
         while stack:
@@ -127,12 +127,8 @@ class DinicSolver(Solver):
         for n in self.dinic_network.nodes:
             self.levels[n.id] = -1
 
-        # Level of source vertex
         self.levels[source] = 0
 
-        # Create a queue, enqueue source vertex
-        # and mark source vertex as visited here
-        # level[] array works as visited array also
         q = []
         q.append(source)
         while q:
@@ -144,11 +140,7 @@ class DinicSolver(Solver):
 
                 if self.levels[neighbor.id] < 0 and abs(neighbor_arc.flow) < neighbor_arc.capacity.ub:
 
-                    # Level of current vertex is
-                    # level of parent + 1
                     self.levels[neighbor.id] = self.levels[current_node_id]+1
                     q.append(neighbor.id)
 
-        # If we can not reach to the sink we
-        # return False else True
-        return False if self.levels[sink] < 0 else True
+        return self.levels[sink] != -1
