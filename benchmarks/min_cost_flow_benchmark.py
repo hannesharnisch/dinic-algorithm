@@ -8,12 +8,13 @@ from functools import reduce
 """
 
 def run_pipeline(method, data_path):
+    update_env_file('../.env', 'RUN_BENCHMARK', "False")
     if method == "Dinic" or method == "Gurobi":
-        update_env_file('.env', 'DATA_PATH', data_path)
-        update_env_file('.env', 'SOLVER_METHOD', method)
+        update_env_file('../.env', 'DATA_PATH', data_path)
+        update_env_file('../.env', 'SOLVER_METHOD', method)
     else:
-        update_env_file('.env', 'DATA_PATH', data_path)
-        update_env_file('.env', 'USE_INITIAL_SOLUTION', "False")
+        update_env_file('../.env', 'DATA_PATH', data_path)
+        update_env_file('../.env', 'USE_INITIAL_SOLUTION', "False")
 
     run_command("python main.py")
 
@@ -106,7 +107,7 @@ def convert_to_milliseconds(time_dict):
     return {key: f"{value * 1000} ms" for key, value in time_dict.items()}
 
 if __name__ == "__main__":
-    data_path = "Data/chvatal_small.json"
+    data_path = "../Data/netgen_8_13a.json"
     times_to_test = 10
 
     dinicResults = []
@@ -131,4 +132,5 @@ if __name__ == "__main__":
     withoutInitalSoultionResult = convert_to_milliseconds(calcAverages(withoutInitalSoultionResults))
     print("WithoutInitialSoultion RESULT")
     print(withoutInitalSoultionResult)
+
 
