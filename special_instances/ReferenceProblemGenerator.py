@@ -1,4 +1,6 @@
 import json
+import random
+
 
 class ReferenceProblemGenerator:
     def create_reference_problem(self, n):
@@ -51,7 +53,7 @@ class ReferenceProblemGenerator:
             initial_data["arcs"].append(
                 {
                     "from": str(i),
-                    "to": str(int((i+level_node_count+1) % n-2)),
+                    "to": str(random.randint(level_node_count, n-3)),
                     "cost": 0,
                     "lower_bound": 0,
                     "upper_bound": 1
