@@ -9,13 +9,13 @@ from functools import reduce
 
 
 def run_pipeline(method, data_path):
-    update_env_file('../.env', 'RUN_BENCHMARK', "False")
+    update_env_file('.env', 'RUN_BENCHMARK', "False")
     if method == "Dinic" or method == "Gurobi":
-        update_env_file('../.env', 'DATA_PATH', data_path)
-        update_env_file('../.env', 'SOLVER_METHOD', method)
+        update_env_file('.env', 'DATA_PATH', data_path)
+        update_env_file('.env', 'SOLVER_METHOD', method)
     else:
-        update_env_file('../.env', 'DATA_PATH', data_path)
-        update_env_file('../.env', 'USE_INITIAL_SOLUTION', "False")
+        update_env_file('.env', 'DATA_PATH', data_path)
+        update_env_file('.env', 'USE_INITIAL_SOLUTION', "False")
 
     run_command("python main.py")
 
@@ -36,13 +36,13 @@ def get_json_value(file_path, key):
 def read_output_and_get_runtime(method):
     if method == "Dinic" or method == "Gurobi":
         maxFlowPath = os.path.dirname(
-            __file__) + f"/Output/{method}/MaxFlow.json"
+            __file__) + f"/../Output/{method}/MaxFlow.json"
         maxFlowTime = get_json_value(maxFlowPath, "calc_duration")
     else:
         maxFlowTime = 0
 
     minFlowPath = os.path.dirname(
-        __file__) + f"/Output/Gurobi/MinCostFlow.json"
+        __file__) + f"/../Output/Gurobi/MinCostFlow.json"
     minFlowTime = get_json_value(minFlowPath, "calc_duration")
 
     return {
@@ -116,7 +116,7 @@ def convert_to_milliseconds(time_dict):
 
 
 if __name__ == "__main__":
-    data_path = "../Data/MinCost/netgen_8_13a.json"
+    data_path = "Data/MinCost/chvatal_small.json"
     times_to_test = 10
 
     dinicResults = []

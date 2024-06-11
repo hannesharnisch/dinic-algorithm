@@ -4,8 +4,8 @@ import os
 
 
 def run_pipeline(data_path):
-    update_env_file('../.env', 'RUN_BENCHMARK', 'TRUE')
-    update_env_file('../.env', 'BENCHMARK_PATH', data_path)
+    update_env_file('.env', 'RUN_BENCHMARK', 'TRUE')
+    update_env_file('.env', 'BENCHMARK_PATH', data_path)
 
     run_command("python main.py")
 
@@ -16,7 +16,7 @@ def run_pipeline(data_path):
 
 
 def read_output_and_get_runtime(method):
-    maxFlowPath = os.path.dirname(__file__) + f"/Output/Benchmark/{method}.json"
+    maxFlowPath = os.path.dirname(__file__) + f"/../Output/Benchmark/{method}.json"
     maxFlowTime = get_json_value(maxFlowPath, "calc_duration") * 1000
     return maxFlowTime
 
@@ -79,7 +79,7 @@ def convert_to_milliseconds(time_dict):
 
 
 if __name__ == "__main__":
-    data_path = "../Data/MaxFlow/reference_problem.json"
+    data_path = "Data/MaxFlow/reference_problem.json"
     times_to_test = 10
 
     results = []
