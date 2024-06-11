@@ -13,9 +13,9 @@ class ReferenceProblemGenerator:
         initial_data["nodes"]["s"] = {"demand": 0}
         initial_data["nodes"]["t"] = {"demand": 0}
 
-        level_node_count = n/2 - 1
+        level_node_count = int(n/2 - 1)
 
-        for i in range(int(level_node_count)):
+        for i in range(level_node_count):
             initial_data["nodes"][str(i)] = {"demand": 0}
             initial_data["nodes"][str(i+level_node_count)] = {"demand": 0}
             initial_data["arcs"].append(
