@@ -44,10 +44,11 @@ class DinicSolver(Solver):
 
             i += 1
 
-        logger.info(f"Iterations: {i}")
         flow = self.get_final_flow()
 
         end = datetime.now()
+
+        logger.info(f"Iterations: {i}")
 
         logger.success(f"Dinic - Calculation duration: {end-start}")
 

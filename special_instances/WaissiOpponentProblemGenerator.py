@@ -9,14 +9,16 @@ class WaissiOpponentProblemGenerator(MinCostFlowProblemGenerator):
             "nodes": {},
             "arcs": []
         }
-        positive_list, negative_list = self.generate_balanced_lists(supplier_node_count, target_node_count)
+        positive_list, negative_list = self.generate_balanced_lists(
+            supplier_node_count, target_node_count)
 
         # Generate nodes
         for i in range(supplier_node_count):
             initial_data["nodes"][str(i)] = {"demand": negative_list[i]}
 
         for i in range(target_node_count):
-            initial_data["nodes"][str(i + supplier_node_count)] = {"demand": positive_list[i]}
+            initial_data["nodes"][str(
+                i + supplier_node_count)] = {"demand": positive_list[i]}
 
         # Generate Arcs
         # 2 for start and target nodes which will be appended in transformation to maxflow
@@ -38,6 +40,8 @@ class WaissiOpponentProblemGenerator(MinCostFlowProblemGenerator):
 
         self.save_json(json_path, initial_data)
 
+
 if __name__ == "__main__":
     generator = WaissiOpponentProblemGenerator()
-    generator.create_network("../Data/sample_waissi_oppenent.json", 127, 127)
+    generator.create_network(
+        "../Data/MinCost/sample_waissi_oppenent.json", 127, 127)

@@ -10,13 +10,15 @@ class TwoLayerCoherentNetworkGenerator(MinCostFlowProblemGenerator):
             "nodes": {},
             "arcs": []
         }
-        positive_list, negative_list = self.generate_balanced_lists(supplier_node_count, target_node_count)
+        positive_list, negative_list = self.generate_balanced_lists(
+            supplier_node_count, target_node_count)
 
         for i in range(supplier_node_count):
             initial_data["nodes"][str(i)] = {"demand": negative_list[i]}
 
         for i in range(target_node_count):
-            initial_data["nodes"][str(i + supplier_node_count)] = {"demand": positive_list[i]}
+            initial_data["nodes"][str(
+                i + supplier_node_count)] = {"demand": positive_list[i]}
 
         for i in range(supplier_node_count):
             for j in range(target_node_count):
@@ -31,6 +33,8 @@ class TwoLayerCoherentNetworkGenerator(MinCostFlowProblemGenerator):
                 )
         self.save_json(json_path, initial_data)
 
+
 if __name__ == "__main__":
     creator = TwoLayerCoherentNetworkGenerator()
-    creator.create_network("../Data/sample_2_layer_coherent.json", 128, 128)
+    creator.create_network(
+        "../Data/MinCost/sample_2_layer_coherent.json", 128, 128)
