@@ -46,11 +46,12 @@ class ReferenceProblemGenerator:
                 }
             )
 
+        # Add additional nodes
         for i in range(int(n/2)):
             initial_data["arcs"].append(
                 {
                     "from": str(i),
-                    "to": str(i+level_node_count+1),
+                    "to": str(int((i+level_node_count+1) % n-2)),
                     "cost": 0,
                     "lower_bound": 0,
                     "upper_bound": 1
