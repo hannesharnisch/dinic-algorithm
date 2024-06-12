@@ -50,15 +50,26 @@ class ReferenceProblemGenerator:
 
         # Add additional nodes
         for i in range(int(n/2)):
-            initial_data["arcs"].append(
-                {
-                    "from": str(i),
-                    "to": str(random.randint(level_node_count, n-3)),
-                    "cost": 0,
-                    "lower_bound": 0,
-                    "upper_bound": 1
-                }
-            )
+            if i == 127:
+                initial_data["arcs"].append(
+                    {
+                        "from": str(i-1),
+                        "to": str(random.randint(level_node_count, n - 3)),
+                        "cost": 0,
+                        "lower_bound": 0,
+                        "upper_bound": 1
+                    }
+                )
+            else:
+                initial_data["arcs"].append(
+                    {
+                        "from": str(i),
+                        "to": str(random.randint(level_node_count, n-3)),
+                        "cost": 0,
+                        "lower_bound": 0,
+                        "upper_bound": 1
+                    }
+                )
 
         print(f"Number of nodes: {len(initial_data['nodes'].keys())}")
         print(f"Number of arcs: {len(initial_data['arcs'])}")
